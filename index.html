@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sec10 - 10 Security Rules</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #e2e8f0; line-height: 1.6; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 2.5rem; background: linear-gradient(90deg, #ef4444, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #94a3b8; margin-bottom: 40px; }
+        .rule { background: #1e293b; border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px solid #334155; }
+        .rule-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .rule-num { background: linear-gradient(135deg, #ef4444, #f97316); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+        .rule-title { font-size: 1.3rem; font-weight: 600; color: #f1f5f9; }
+        .rule p { color: #cbd5e1; margin-bottom: 15px; }
+        .code-block { background: #0f172a; padding: 15px; border-radius: 8px; overflow-x: auto; border-left: 3px solid #22d3ee; margin: 10px 0; }
+        .code-block code { color: #a5b4fc; font-family: 'Monaco', 'Menlo', monospace; font-size: 0.85rem; }
+        .bad { color: #f87171; font-weight: bold; }
+        .good { color: #4ade80; font-weight: bold; }
+        pre { white-space: pre-wrap; }
+        .checklist { background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 16px; padding: 25px; margin-top: 30px; }
+        .checklist h2 { color: #a5b4fc; margin-bottom: 15px; text-align: center; }
+        .checklist ul { columns: 2; }
+        .checklist li { color: #cbd5e1; margin-bottom: 8px; }
+        @media (max-width: 600px) { .checklist ul { columns: 1; } }
+        footer { text-align: center; margin-top: 40px; color: #64748b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Sec10</h1>
+        <p class="subtitle">10 Security Rules for Writing Safe Code</p>
+        
+        <div class="rule">
+            <div class="rule-header">
+                <div class="rule-num">1</div>
+                <div class="rule-title">Validate All Input, Sanitize All Output</div>
+            </div>
+            <p>Never trust external data. Validate on entry, sanitize on exit. Use parameterized queries.</p>
+            <div class="code-block"><pre><code>// ❌ BAD: SQL Injection
+db.query(`SELECT * WHERE name = '${query}'`)
+
+// ✅ GOOD: Parameterized
+db.query('SELECT * WHERE name = $1', [query])</code></pre></div>
+        </div>
+
+        <div class="rule">
+            <div class="rule-header">
+                <div class="rule-num">2</div>
+                <div class="rule-title">Principle of Least Privilege</div>
+            </div>
+            <p>Every component runs with minimum permissions. Database users should have only needed access. Don't use admin credentials for app connections.</p>
+        </div>
+
+        <div class="rule">
+            <div class="rule-header">
+                <div class="rule-num">3</div>
+                <div class="rule-title">Never Expose Secrets in Code</div>
+            </div>
+            <p>No API keys, passwords, or tokens in source code. Use environment variables or secrets managers.</p>
+            <div class="code-block"><pre><code>// ❌ BAD
+const API_KEY = 'sk_live_123';
+
+// ✅ GOOD
+const apiKey = process.env.API_KEY;</code></pre></div>
+        </div>
+
+        <div class="rule">
+            <div class="rule-header">
+                <div class="rule-num">4</div>
+                <div class="rule-title">Proper Authentication & Session Management</div>
+            </div>
+            <p>Use established libraries (Passport, Auth0). Never roll your own auth. Use secure, httpOnly, sameSite cookies.</p>
+        </div>
+
+        <div class="rule">
+            <div class="rule-header">
+                <div class="rule-num">5</div>
+                <div class="rule-title">Encrypt Data at Rest and in Transit</div>
+            </div>
+            <p>Use TLS 1.2+ for all connections. Encrypt sensitive data in database with AES-256-GCM.</p>
+        </div>
+
+        <div class="rule">
+            <div class="rule-header">
+                <div class="rule-num">6</div>
+                <div class="rule-title">Implement Access Control</div>
+            </div>
+            <p>Check permissions on every request. Deny by default. Test for horizontal and vertical privilege escalation.</p>
+        </div>
+
+        <div class="rule">
+            <div class="rule-header">
+                <div class="rule-num">7</div>
+                <div class="rule-title">Protect Against Injection</div>
+            </div>
+            <p>SQL, NoSQL, Command, and LDAP injection: never concatenate untrusted data into commands.</p>
+        </div>
+
+        <div class="rule">
+            <div class="rule-header">
+                <div class="rule-num">8</div>
+                <div class="rule-title">Secure Dependencies</div>
+            </div>
+            <p>Run npm audit in CI. Use Dependabot. Remove unused dependencies. Pin versions in production.</p>
+        </div>
+
+        <div class="rule">
+            <div class="rule-header">
+                <div class="rule-num">9</div>
+                <div class="rule-title">Secure File Handling</div>
+            </div>
+            <p>Validate file type (magic bytes), limit size, generate random filenames, store outside webroot. Never execute uploaded files.</p>
+        </div>
+
+        <div class="rule">
+            <div class="rule-header">
+                <div class="rule-num">10</div>
+                <div class="rule-title">Log Security Events</div>
+            </div>
+            <p>Log authentication failures, authorization denials. Never log passwords, tokens, or secrets.</p>
+        </div>
+
+        <div class="checklist">
+            <h2>✅ Pre-Commit Security Checklist</h2>
+            <ul>
+                <li>All input validated with Zod/schemas</li>
+                <li>No secrets in code</li>
+                <li>Parameterized DB queries</li>
+                <li>Secure cookies (httpOnly, sameSite)</li>
+                <li>Dependencies audited</li>
+                <li>File uploads validated</li>
+                <li>Authorization checks on every route</li>
+                <li>Security events logged</li>
+                <li>TLS enabled</li>
+                <li>Least privilege applied</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>Based on OWASP Top 10 • <a href="https://github.com/JorgeQuijano/sec10" style="color: #22d3ee;">View on GitHub</a></p>
+        </footer>
+    </div>
+</body>
+</html>
